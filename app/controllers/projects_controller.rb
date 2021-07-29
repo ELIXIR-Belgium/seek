@@ -56,7 +56,7 @@ class ProjectsController < ApplicationController
     @requests = ProjectCreationMessageLog.pending_requests.select do |r|
       r.can_respond_project_creation_request?(current_user)
     end
-        
+
     respond_to do |format|
       format.html
     end
@@ -279,7 +279,7 @@ class ProjectsController < ApplicationController
     end
   end
 
-  
+
   # GET /projects/1
   def show
     respond_to do |format|
@@ -480,7 +480,7 @@ class ProjectsController < ApplicationController
       format.html { redirect_to project_path(@project) }
     end
   end
-  
+
   def admin_members
     respond_with(@project)
   end
@@ -652,10 +652,19 @@ class ProjectsController < ApplicationController
   end
 
   def download_ena_tsv
-    client = Seek::Ena::EnaClient.new
-    tsv_files = client.generate_ena_tsv ["ENA_study", "ENA_experiment", "ENA_run", "ENA_sample"]
-    zipfile = client.zip_files(tsv_files[:files])
-    send_file zipfile, filename: "ena_export.zip", type: "application/zip", deposition: "attachment"
+    client = Ena::EnaClient.new
+    # TODO Person > has_many :sample_types, foreign_key: :contributor_id
+    sample_types = SampleType.where(title: ["ENA_study", "ENA_experiment", "ENA_run", "ENA_sample"], contributor_id: current_user.id)
+    if !sample_types.any?
+      respond_to do |format|
+        flash[:error] = "No data to download!"
+        format.html { redirect_to project_path(@project) }
+      end
+    else
+      tsv_files = client.generate_ena_tsv sample_types
+      zipfile = client.zip_files(tsv_files[:files])
+      send_file zipfile, filename: "ena_export.zip", type: "application/zip", deposition: "attachment"
+    end
   end
 
   private

@@ -38,7 +38,7 @@ def load_seek_config_defaults!
   Seek::Config.default :community_news_enabled,false
   Seek::Config.default :community_news_feed_urls,''
   Seek::Config.default :community_news_number_of_entries,10
-  Seek::Config.default :home_description, 'You can configure the text that goes here within the Admin pages: Site Configuration->Home page settings.'
+  Seek::Config.default :home_description, '<strong>THIS SITE IS FOR TESTING PURPOSES ONLY.</strong><br/><strong>INFORMATION STORED IN THIS SITE WILL BE DELETED FREQUENTLY AND WITHOUT WARNING</strong>'
   Seek::Config.default :tagline_prefix, 'Find, share and exchange <b>Data</b>, <b>Models</b> and <b>Processes</b> within the'
   Seek::Config.default :publish_button_enabled, true
   Seek::Config.default :auth_lookup_enabled,true
@@ -71,13 +71,16 @@ def load_seek_config_defaults!
 
   # Types
   Seek::Config.default :documents_enabled,true
+  Seek::Config.default :data_files_enabled,true
   Seek::Config.default :events_enabled,true
   Seek::Config.default :isa_enabled, true
   Seek::Config.default :models_enabled,true
   Seek::Config.default :organisms_enabled,true
   Seek::Config.default :programmes_enabled, false
+  Seek::Config.default :presentations_enabled,true
   Seek::Config.default :publications_enabled,true
   Seek::Config.default :samples_enabled, true
+  Seek::Config.default :sops_enabled, true
   Seek::Config.default :workflows_enabled, false
   Seek::Config.default :collections_enabled, false
 
@@ -195,8 +198,9 @@ def load_seek_config_defaults!
   Seek::Config.default :news_feed_urls,''
   Seek::Config.default :news_number_of_entries,10
   Seek::Config.default :recent_contributions_number_of_entries, 20
-
   Seek::Config.default :front_page_buttons_enabled, false
+  Seek::Config.default :tag_cloud_enabled,true
+  Seek::Config.default :workflow_class_list_enabled,false
 
   # omniauth settings and behaviour
   Seek::Config.default :omniauth_enabled, false
@@ -235,6 +239,8 @@ def load_seek_config_defaults!
   Seek::Config.default :results_per_page_default_condensed, 14
   Seek::Config.default :results_per_page, {}
   Seek::Config.default :sorting, {}
+
+  Seek::Config.default :life_monitor_enabled, false
 
   load_seek_testing_defaults! if Rails.env.test?
 end

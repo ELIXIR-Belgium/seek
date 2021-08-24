@@ -10,16 +10,19 @@
           </a>
           <span class="subtle"><%= version_text -%></span>
         </div>
+        <div id="elixir-belgium-credit">
+          <a href="https://www.elixir-belgium.org/" target="_blank" class="powered-by">
+            <img id="elixir-logo" src="/assets/elixir.png" width="85" height="85" alt="elixir-logo"/>
+          </a>
+        </div>
         <% cache cache_name, skip_digest: true do -%>
           <div class="ft-info">
-            <% if Seek::Config.dm_project_link != Seek::Config.project_link %>
-                <%= link_to "About #{Seek::Config.dm_project_name}", Seek::Config.dm_project_link, :target => '_blank' %> |
-            <% end %>
+
             <%= link_to Seek::Config.project_name, Seek::Config.project_link, :target => '_blank' %> |
             <% if logged_in_and_registered? %>
                 <%= link_to 'Provide feedback', feedback_home_path -%> |
             <% end %>
-            <%= link_to 'Funding and Programmes', funding_home_path -%> |
+
             <%= link_to 'Credits', Seek::Help::HelpDictionary.instance.help_link(:credits), :target => '_blank' -%>
             <% if Seek::Config.terms_enabled %>
                 | <%= link_to("Terms & Conditions", terms_home_path) %>

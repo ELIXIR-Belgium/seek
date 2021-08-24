@@ -40,7 +40,7 @@ def load_seek_config_defaults!
   Seek::Config.default :community_news_enabled,false
   Seek::Config.default :community_news_feed_urls,''
   Seek::Config.default :community_news_number_of_entries,10
-  Seek::Config.default :home_description, 'You can configure the text that goes here within the Admin pages: Site Configuration->Home page settings.'
+  Seek::Config.default :home_description, '<strong>THIS SITE IS FOR TESTING PURPOSES ONLY.</strong><br/><strong>INFORMATION STORED IN THIS SITE WILL BE DELETED FREQUENTLY AND WITHOUT WARNING</strong>'
   Seek::Config.default :home_description_position, 'side'
   Seek::Config.default :tagline_prefix, 'Find, share and exchange <b>Data</b>, <b>Models</b> and <b>Processes</b> within the'
   Seek::Config.default :publish_button_enabled, true
@@ -136,7 +136,7 @@ def load_seek_config_defaults!
   Seek::Config.default :contact_link, ''
 
   Seek::Config.default :funding_link, ''
-  
+
   #Terms and conditions page
   Settings.defaults[:terms_enabled]= false
   Seek::Config.default :terms_page, File.read(Rails.root.join('config/default_data/terms_and_conditions_example'))

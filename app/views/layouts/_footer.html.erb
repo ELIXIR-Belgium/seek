@@ -51,3 +51,60 @@
     <% end -%>
   </div>
 </div>
+
+<% logged_in?? cache_name = 'footer' : cache_name = 'footer1' %>
+
+
+    <div id="ft">
+      <div class="container">
+        <div id="seek-credit">
+          <a href="http://www.seek4science.org" target="_blank" class="powered-by">
+            Powered by<br/>
+            <%= image(:seek_logo, width: 64, height: 64) %>
+          </a>
+          <span class="subtle"><%= version_text -%></span>
+        </div>
+        <div id="elixir-belgium-credit">
+          <a href="https://www.elixir-belgium.org/" target="_blank" class="powered-by">
+            <img id="elixir-logo" src="/assets/elixir.png" width="85" height="85" alt="elixir-logo"/>
+          </a>
+        </div>
+        <% cache cache_name, skip_digest: true do -%>
+          <div class="ft-info">
+
+            <%= link_to Seek::Config.project_name, Seek::Config.project_link, :target => '_blank' %> |
+            <% if logged_in_and_registered? %>
+                <%= link_to 'Provide feedback', feedback_home_path -%> |
+            <% end %>
+
+            <%= link_to 'Credits', Seek::Help::HelpDictionary.instance.help_link(:credits), :target => '_blank' -%>
+            <% if Seek::Config.terms_enabled %>
+                | <%= link_to("Terms & Conditions", terms_home_path) %>
+            <% end %>
+            <% if Seek::Config.privacy_enabled %>
+                | <%= link_to("Privacy Policy", privacy_home_path) %>
+            <% end %>
+            <% if Seek::Config.imprint_enabled %>
+                | <%= link_to("Imprint", imprint_home_path) %>
+            <% end %>
+            <% if !Seek::Config.cite_link.blank? %>
+              | <%= link_to "Cite us", Seek::Config.cite_link, :target => '_blank' -%>
+            <% end %>
+            <% if !Seek::Config.contact_link.blank? %>
+              | <%= link_to "Contact us", Seek::Config.contact_link, :target => '_blank' -%>
+            <% end %>
+            <% if cookie_consent.required? %>
+              | <%= link_to 'Cookie preferences', cookies_consent_path %>
+            <% end %>
+          </div>
+          <div class="ft-info">
+            Copyright &copy; 2008 - 2023
+            <%= link_to "The University of Manchester", "http://www.manchester.ac.uk/", :target => '_blank' %> and
+            <%= link_to "HITS gGmbH", "http://www.h-its.org/", :target => '_blank' %>
+            <% if Seek::Config.copyright_addendum_enabled  %>
+                <br/><%= Seek::Config.copyright_addendum_content.html_safe%>
+            <% end %>
+          </div>
+        <% end -%>
+      </div>
+    </div>

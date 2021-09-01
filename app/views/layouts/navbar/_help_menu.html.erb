@@ -13,9 +13,13 @@
       <li><%= link_to t("menu.isa_best_practice"), help_documents_path + '/isa-best-practice' -%></li>
     <% end %>
     <li><%= link_to t("menu.api"), asset_path('api', skip_pipeline: true) %></li>
-    <% if logged_in_and_registered? %>
+    <%
+=begin%>
+ <% if logged_in_and_registered? %>
         <li><%= link_to 'Provide feedback', feedback_home_path -%></li>
     <% end %>
+<%
+=end%>
     <% if Seek::Config.issue_tracker.present? %>
       <% if logged_in_and_registered? %>
           <li><%= link_to t('menu.report_issue'), report_issue_home_path %></li>

@@ -71,13 +71,6 @@
         </div>
         <% cache cache_name, skip_digest: true do -%>
           <div class="ft-info">
-
-            <%= link_to Seek::Config.project_name, Seek::Config.project_link, :target => '_blank' %> |
-            <% if logged_in_and_registered? %>
-                <%= link_to 'Provide feedback', feedback_home_path -%> |
-            <% end %>
-
-            <%= link_to 'Credits', Seek::Help::HelpDictionary.instance.help_link(:credits), :target => '_blank' -%>
             <% if Seek::Config.terms_enabled %>
                 | <%= link_to("Terms & Conditions", terms_home_path) %>
             <% end %>

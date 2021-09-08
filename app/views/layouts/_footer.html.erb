@@ -72,7 +72,7 @@
         <% cache cache_name, skip_digest: true do -%>
           <div class="ft-info">
             <% if Seek::Config.terms_enabled %>
-                | <%= link_to("Terms & Conditions", terms_home_path) %>
+                <%= link_to("Terms & Conditions", terms_home_path) %>
             <% end %>
             <% if Seek::Config.privacy_enabled %>
                 | <%= link_to("Privacy Policy", privacy_home_path) %>

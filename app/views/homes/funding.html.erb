@@ -11,11 +11,10 @@
 <div class="container">
 <div class='row funder-row'>
   <div class='col-md-2'>
-    <%= image 'fwo-logo',:class=>'funder-logo' %>
+   <%= link_to image('fwo-logo', :class=>'funder-logo'), "https://www.fwo.be/", target:'_blank' %>
   </div>
   <div class="col-md-10">
-    <%= link_to "FWO", "https://www.fwo.be/", target:'_blank' %>
-     Development of DataHub is supported by the Research Foundation - Flanders (FWO) project I002819N
+     Development of DataHub is supported by the Research Foundation - Flanders (<%= link_to "FWO", "https://www.fwo.be/", target:'_blank' %>) project I002819N
   </div>
 </div>
 

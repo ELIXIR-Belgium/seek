@@ -71,6 +71,7 @@
         </div>
         <% cache cache_name, skip_digest: true do -%>
           <div class="ft-info">
+            <%= link_to 'Funding', funding_home_path -%> |
             <% if Seek::Config.terms_enabled %>
                 <%= link_to("Terms & Conditions", terms_home_path) %>
             <% end %>

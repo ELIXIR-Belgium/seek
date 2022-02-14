@@ -1,5 +1,7 @@
 class ContributedResourceSerializer < PCSSerializer
-  attributes :title, :description, :license
+  attributes :title
+  attribute :license, if: -> {object.respond_to?(:license)}
+  attribute :description, if: -> {object.respond_to?(:description)}
 
   attribute :version, key: :latest_version, if: -> { object.respond_to?(:version) }
 
@@ -33,18 +35,26 @@ class ContributedResourceSerializer < PCSSerializer
     get_version.updated_at
   end
 
+  def get_correct_blob_content(requested_version)
+    blobs = if requested_version.respond_to?(:content_blobs)
+              requested_version.content_blobs
+            elsif requested_version.respond_to?(:content_blob)
+              [requested_version.content_blob].compact
+            else
+              []
+            end
+
+    blobs.map { |cb| convert_content_blob_to_json(cb) }
+  end
+
   attribute :content_blobs, if: -> { object.respond_to?(:content_blobs) || object.respond_to?(:content_blob) } do
     requested_version = get_version
 
-    if requested_version.respond_to?(:content_blobs)
-      blobs = requested_version.content_blobs
-    elsif requested_version.respond_to?(:content_blob)
-      blobs = [requested_version.content_blob].compact
-    else
-      blobs = []
-    end
+    get_correct_blob_content(requested_version)
+  end
 
-    blobs.map { |cb| convert_content_blob_to_json(cb) }
+  attribute :creators, if: -> { object.respond_to?(:assets_creators) } do
+    serialize_assets_creators
   end
 
   attribute :other_creators
@@ -77,6 +87,6 @@ class ContributedResourceSerializer < PCSSerializer
   private
 
   def version_number
-    @scope[:requested_version] || object.try(:version)
+    @scope.try(:[],:requested_version) || object.try(:version)
   end
 end

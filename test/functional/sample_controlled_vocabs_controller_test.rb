@@ -269,6 +269,65 @@ class SampleControlledVocabsControllerTest < ActionController::TestCase
     assert_select('a#add-term') do |button|
       assert button.attr('disabled').nil?
     end
+  end
 
+  test 'fetch ols terms with root term included' do
+    person = Factory(:person)
+    login_as(person)
+    VCR.use_cassette('ols/fetch_obo_cell_projection') do
+      get :fetch_ols_terms, params: { source_ontology_id: 'ro',
+                                      root_uri: 'http://purl.obolibrary.org/obo/GO_0042995',
+                                      include_root_term: '1' }, format: :json
+
+      assert_response :success
+      res = JSON.parse(response.body)
+      assert_equal 4, res.length
+      iris = res.map { |term| term['iri'] }
+      assert_includes iris, 'http://purl.obolibrary.org/obo/GO_0043005'
+      assert_includes iris, 'http://purl.obolibrary.org/obo/GO_0042995'
+    end
+  end
+
+  test 'fetch ols terms without root term included' do
+    person = Factory(:person)
+    login_as(person)
+    VCR.use_cassette('ols/fetch_obo_cell_projection') do
+      get :fetch_ols_terms, params: { source_ontology_id: 'ro',
+                                      root_uri: 'http://purl.obolibrary.org/obo/GO_0042995' }, format: :json
+
+      assert_response :success
+      res = JSON.parse(response.body)
+      assert_equal 3, res.length
+      iris = res.map { |term| term['iri'] }
+      refute_includes iris, 'http://purl.obolibrary.org/obo/GO_0042995'
+      assert_includes iris, 'http://purl.obolibrary.org/obo/GO_0043005'
+    end
+  end
+
+  test 'fetch ols terms with wrong URI' do
+    person = Factory(:person)
+    login_as(person)
+    VCR.use_cassette('ols/fetch_obo_bad_term') do
+      get :fetch_ols_terms, params: { source_ontology_id: 'ro',
+                                      root_uri: 'http://purl.obolibrary.org/obo/banana',
+                                      include_root_term: '1' }, format: :json
+
+      assert_response :unprocessable_entity
+      res = JSON.parse(response.body)
+      assert_equal '404 Not Found', res.dig('errors', 0, 'details')
+    end
+  end
+
+  test 'can access typeahead with samples disabled' do
+    person = Factory(:person)
+    login_as(person)
+    scv = Factory(:edam_topics_controlled_vocab)
+    with_config_value(:samples_enabled, false) do
+      get :typeahead, params: { format: :json, query: 'sam', scv_id:scv.id }
+      assert_response :success
+      res = JSON.parse(response.body)
+      assert_equal 1, res.length
+      assert_equal 'Sample collections', res.first['name']
+    end
   end
 end

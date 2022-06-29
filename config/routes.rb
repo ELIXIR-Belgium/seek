@@ -36,7 +36,6 @@ SEEK::Application.routes.draw do
     end
     resources :content_blobs do
       member do
-        get :view_pdf_content
         get :view_content
         get :get_pdf
         get :download
@@ -480,6 +479,7 @@ SEEK::Application.routes.draw do
       get :select_sample_type
       get :confirm_extraction
       get :extraction_status
+      get :persistence_status
       post :extract_samples
       delete :cancel_extraction
       get :destroy_samples_confirm
@@ -739,9 +739,29 @@ SEEK::Application.routes.draw do
     end
   end
 
-   ### SINGLE PAGE
+  ### TEMPLATES ###
+  resources :templates do
+    resources :projects, only: [:index]
+    member do
+      get :manage
+      patch :manage_update
+    end
+  end
 
+  ### SINGLE PAGE
   resources :single_pages do
+    member do
+      get :dynamic_table_data
+      get :export_isa, action: :export_isa
+    end
+  end
+
+  ### ISA STUDY
+  resources :isa_studies do
+  end
+
+  ### ISA ASSAY
+  resources :isa_assays do
   end
 
   resources :culture_growth_types, only: [:show]

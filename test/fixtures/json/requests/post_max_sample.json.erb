@@ -15,14 +15,6 @@
           "type": "sample_types"
         }
       },
-      "submitter": {
-        "data": [
-          {
-            "id": "<%= current_person.id %>",
-            "type": "people"
-          }
-        ]
-      },
       "creators": {
         "data": [
           {
@@ -36,6 +28,14 @@
           {
             "id": "<%= @project.id %>",
             "type": "projects"
+          }
+        ]
+      },
+      "assays": {
+        "data": [
+          {
+            "id": "<%= @assay.id %>",
+            "type": "assays"
           }
         ]
       }

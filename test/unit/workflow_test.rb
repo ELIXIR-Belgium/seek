@@ -546,8 +546,8 @@ class WorkflowTest < ActiveSupport::TestCase
   end
 
   test 'tags and edam in json api' do
-    Factory(:edam_topics_controlled_vocab)
-    Factory(:edam_operations_controlled_vocab)
+    Factory(:edam_topics_controlled_vocab) unless SampleControlledVocab::SystemVocabs.edam_topics_controlled_vocab
+    Factory(:edam_operations_controlled_vocab) unless SampleControlledVocab::SystemVocabs.edam_operations_controlled_vocab
 
     user = Factory(:user)
 
@@ -561,5 +561,20 @@ class WorkflowTest < ActiveSupport::TestCase
 
     assert_equal [{label:'Clustering', identifier: 'http://edamontology.org/operation_3432'}], json[:edam_operations]
     assert_equal [{label:'Chemistry', identifier: 'http://edamontology.org/topic_3314'}], json[:edam_topics]
+  end
+
+  test 'edam annotation properties'do
+    wf = Factory(:workflow)
+
+    assert wf.supports_edam_annotations?
+    assert wf.supports_edam_annotations?(:topics)
+    assert wf.supports_edam_annotations?(:operations)
+    refute wf.supports_edam_annotations?(:formats)
+    refute wf.supports_edam_annotations?(:data)
+
+    assert wf.respond_to?(:edam_topics)
+    assert wf.respond_to?(:edam_operations)
+    refute wf.respond_to?(:edam_formats)
+    refute wf.respond_to?(:edam_data)
   end
 end

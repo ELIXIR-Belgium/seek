@@ -917,27 +917,39 @@ class SamplesControllerTest < ActionController::TestCase
 
   test 'batch_create' do
     person = Factory(:person)
-    creator = Factory(:person)
     login_as(person)
     type = Factory(:patient_sample_type)
+    assay = Factory(:assay, contributor: person)
     assert_difference('Sample.count', 2) do
-        post :batch_create, params: {data:[
-        {ex_id: "1",data:{type: "samples", attributes:{attribute_map:{"full name": 'Fred Smith', "age": '22', "weight": '22.1' ,"postcode": 'M13 9PL'}},
-        tags: nil,relationships:{projects:{data:[{id: person.projects.first.id, type: "projects"}]},
-        sample_type:{ data:{id: type.id, type: "sample_types"}}}}},
-        {ex_id: "2", data:{type: "samples",attributes:{attribute_map:{"full name": 'David Tailor', "age": '33', "weight": '33.1' ,"postcode": 'M12 8PL'}},
-        tags: nil,relationships:{projects:{data:[{id: person.projects.first.id, type: "projects"}]},
-        sample_type:{data:{id: type.id, type: "sample_types"}}}}}]}
+      assert_difference('AssayAsset.count', 1) do
+          post :batch_create, params: { data: [
+            { ex_id: "1", data: { type: "samples",
+                                  attributes: { attribute_map: { "full name": 'Fred Smith', "age": '22', "weight": '22.1', "postcode": 'M13 9PL' } },
+                                  relationships: { assays: { data: [{ id: assay.id, type: 'assays' }] },
+                                                    projects: { data: [{ id: person.projects.first.id, type: "projects" }] },
+                                                    sample_type: { data: { id: type.id, type: "sample_types" } } } } },
+            { ex_id: "2", data: { type: "samples",
+                                  attributes: { attribute_map: { "full name": 'David Tailor', "age": '33', "weight": '33.1', "postcode": 'M12 8PL' } },
+                                  relationships: { projects: { data: [{ id: person.projects.first.id, type: "projects" }] },
+                                                    sample_type: { data: { id: type.id, type: "sample_types" } } } } }] }
+      end
     end
 
-    sample1 = Sample.all.first
+		# For the Single Page to work properly, these must be included in the response
+		assert response.body.include?('results')
+		assert response.body.include?('errors')
+		assert response.body.include?('status')
+
+    samples = Sample.last(2)
+    sample1 = samples.first
     assert_equal 'Fred Smith', sample1.title
     assert_equal 'Fred Smith', sample1.get_attribute_value('full name')
     assert_equal '22', sample1.get_attribute_value(:age)
     assert_equal '22.1', sample1.get_attribute_value(:weight)
     assert_equal 'M13 9PL', sample1.get_attribute_value(:postcode)
+    assert_equal [assay], sample1.assays
 
-    sample2 = Sample.limit(2)[1]
+    sample2 = samples.last
     assert_equal 'David Tailor', sample2.title
     assert_equal 'David Tailor', sample2.get_attribute_value('full name')
     assert_equal '33', sample2.get_attribute_value(:age)
@@ -982,6 +994,10 @@ class SamplesControllerTest < ActionController::TestCase
       assert_equal [creator], sample1.creators
     end
 
+		# For the Single Page to work properly, these must be included in the response
+		assert response.body.include?('errors')
+		assert response.body.include?('status')
+
     samples = Sample.limit(2)
 
     first_updated_sample = samples[0]
@@ -1013,6 +1029,10 @@ class SamplesControllerTest < ActionController::TestCase
     assert_difference('Sample.count', -2) do
       delete :batch_delete, params: { data: [ {id: sample1.id}, {id: sample2.id}] }
     end
+
+			# For the Single Page to work properly, these must be included in the response
+			assert response.body.include?('errors')
+			assert response.body.include?('status')
   end
 
   test 'JS request does not raise CORS error' do

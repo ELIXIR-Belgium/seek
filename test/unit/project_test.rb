@@ -213,6 +213,8 @@ class ProjectTest < ActiveSupport::TestCase
     assert project.publications.include?(threePubl)
   end
 
+
+
   def test_can_be_edited_by
     u = Factory(:project_administrator).user
     p = u.person.projects.first
@@ -923,6 +925,26 @@ class ProjectTest < ActiveSupport::TestCase
       assert project.assets.include? unused_df
       assert project.project_assets.include? unused_df
     end
+  end
+
+  test 'edam annotation properties'do
+    project = Factory(:project)
+
+    assert project.supports_edam_annotations?
+    assert project.supports_edam_annotations?(:topics)
+    refute project.supports_edam_annotations?(:operations)
+    refute project.supports_edam_annotations?(:formats)
+    refute project.supports_edam_annotations?(:data)
+
+    assert project.respond_to?(:edam_topics)
+    refute project.respond_to?(:edam_operations)
+    refute project.respond_to?(:edam_formats)
+    refute project.respond_to?(:edam_data)
+
+    Factory(:edam_topics_controlled_vocab) unless SampleControlledVocab::SystemVocabs.edam_topics_controlled_vocab
+    refute project.edam_annotations?
+    project.edam_topics = 'Chemistry'
+    assert project.edam_annotations?
   end
   
 end

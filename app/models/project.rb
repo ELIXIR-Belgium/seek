@@ -23,6 +23,7 @@ class Project < ApplicationRecord
   has_and_belongs_to_many :file_templates
   has_and_belongs_to_many :placeholders
   has_and_belongs_to_many :collections
+  has_and_belongs_to_many :templates
 
   has_many :work_groups, dependent: :destroy, inverse_of: :project
   has_many :institutions, through: :work_groups, inverse_of: :projects
@@ -71,6 +72,8 @@ class Project < ApplicationRecord
   #  fully copied and assigned to belong to owners of assets, where identical policy
   #  is to be used)
   belongs_to :default_policy, class_name: 'Policy', dependent: :destroy, autosave: true
+
+  has_edam_annotations :topics
 
   # FIXME: temporary handler, projects need to support multiple programmes
   def programmes
@@ -127,8 +130,9 @@ class Project < ApplicationRecord
   def columns_default
     super + ['web_page']
   end
+
   def columns_allowed
-    columns_default + ['wiki_page','start_date','end_date']
+    columns_default + ['start_date','end_date']
   end
 
   def locations

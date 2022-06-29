@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_13_092221) do
+ActiveRecord::Schema.define(version: 2022_06_24_091053) do
 
   create_table "activity_logs", force: :cascade do |t|
     t.string "action"
@@ -946,6 +946,11 @@ ActiveRecord::Schema.define(version: 2022_04_13_092221) do
     t.index ["project_id"], name: "index_investigations_projects_on_project_id"
   end
 
+  create_table "isa_tags", force: :cascade do |t|
+    t.string "title"
+    t.index ["title"], name: "index_isa_tags_title"
+  end
+
   create_table "mapping_links", force: :cascade do |t|
     t.string "substance_type"
     t.integer "substance_id"
@@ -1511,6 +1516,13 @@ ActiveRecord::Schema.define(version: 2022_04_13_092221) do
     t.integer "strain_id"
   end
 
+  create_table "projects_templates", force: :cascade do |t|
+    t.bigint "template_id"
+    t.bigint "project_id"
+    t.index ["project_id"], name: "index_projects_templates_on_project_id"
+    t.index ["template_id"], name: "index_projects_templates_on_template_id"
+  end
+
   create_table "projects_workflow_versions", id: false, force: :cascade do |t|
     t.integer "project_id"
     t.integer "version_id"
@@ -1651,15 +1663,6 @@ ActiveRecord::Schema.define(version: 2022_04_13_092221) do
     t.datetime "updated_at"
   end
 
-  create_table "repository_standards", force: :cascade do |t|
-    t.string "title"
-    t.string "url"
-    t.string "group_tag"
-    t.string "repo_type"
-    t.text "description"
-    t.index ["title", "group_tag"], name: "index_repository_standards_title_group_tag"
-  end
-
   create_table "resource_publish_logs", force: :cascade do |t|
     t.string "resource_type"
     t.integer "resource_id"
@@ -1674,10 +1677,10 @@ ActiveRecord::Schema.define(version: 2022_04_13_092221) do
   end
 
   create_table "roles", force: :cascade do |t|
-    t.integer "person_id"
-    t.integer "role_type_id"
+    t.bigint "person_id"
+    t.bigint "role_type_id"
     t.string "scope_type"
-    t.integer "scope_id"
+    t.bigint "scope_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["person_id", "role_type_id"], name: "index_roles_on_person_id_and_role_type_id"
@@ -1713,6 +1716,7 @@ ActiveRecord::Schema.define(version: 2022_04_13_092221) do
     t.integer "linked_sample_type_id"
     t.string "pid"
     t.text "description"
+    t.integer "isa_tag_id"
     t.index ["sample_type_id"], name: "index_sample_attributes_on_sample_type_id"
     t.index ["unit_id"], name: "index_sample_attributes_on_unit_id"
   end
@@ -1748,8 +1752,9 @@ ActiveRecord::Schema.define(version: 2022_04_13_092221) do
     t.string "ols_root_term_uri"
     t.boolean "required"
     t.string "short_name"
-    t.integer "repository_standard_id"
     t.string "key"
+    t.integer "template_id"
+    t.boolean "custom_input", default: false
   end
 
   create_table "sample_resource_links", force: :cascade do |t|
@@ -1770,6 +1775,14 @@ ActiveRecord::Schema.define(version: 2022_04_13_092221) do
     t.boolean "uploaded_template", default: false
     t.integer "contributor_id"
     t.string "deleted_contributor"
+    t.integer "template_id"
+  end
+
+  create_table "sample_types_studies", force: :cascade do |t|
+    t.bigint "sample_type_id"
+    t.bigint "study_id"
+    t.index ["sample_type_id"], name: "index_sample_types_studies_on_sample_type_id"
+    t.index ["study_id"], name: "index_sample_types_studies_on_study_id"
   end
 
   create_table "samples", force: :cascade do |t|
@@ -1798,7 +1811,7 @@ ActiveRecord::Schema.define(version: 2022_04_13_092221) do
 
   create_table "sessions", force: :cascade do |t|
     t.string "session_id", null: false
-    t.text "data", limit: 16777215
+    t.text "data"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["session_id"], name: "index_sessions_on_session_id"
@@ -1989,6 +2002,7 @@ ActiveRecord::Schema.define(version: 2022_04_13_092221) do
     t.text "other_creators"
     t.string "deleted_contributor"
     t.integer "position"
+    t.integer "sop_id"
   end
 
   create_table "study_auth_lookup", force: :cascade do |t|
@@ -2067,10 +2081,67 @@ ActiveRecord::Schema.define(version: 2022_04_13_092221) do
     t.index ["resource_type", "resource_id"], name: "index_tasks_on_resource_type_and_resource_id"
   end
 
+  create_table "template_attributes", force: :cascade do |t|
+    t.string "title"
+    t.string "short_name"
+    t.boolean "required", default: false
+    t.string "ontology_version"
+    t.text "description"
+    t.integer "template_id"
+    t.integer "sample_controlled_vocab_id"
+    t.integer "sample_attribute_type_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "unit_id"
+    t.integer "pos"
+    t.boolean "is_title", default: false
+    t.integer "isa_tag_id"
+    t.string "iri"
+    t.index ["template_id", "title"], name: "index_template_id_asset_id_title"
+  end
+
+  create_table "template_auth_lookup", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "asset_id"
+    t.boolean "can_view", default: false
+    t.boolean "can_manage", default: false
+    t.boolean "can_edit", default: false
+    t.boolean "can_download", default: false
+    t.boolean "can_delete", default: false
+    t.index ["user_id", "asset_id", "can_view"], name: "index_template_auth_lookup_user_id_asset_id"
+    t.index ["user_id", "can_view"], name: "index_template_auth_lookup_on_user_id_and_can_view"
+  end
+
+  create_table "templates", force: :cascade do |t|
+    t.string "title"
+    t.string "group", default: "other"
+    t.integer "group_order"
+    t.string "temporary_name"
+    t.string "template_version"
+    t.string "isa_config"
+    t.string "isa_measurement_type"
+    t.string "isa_technology_type"
+    t.string "isa_protocol_type"
+    t.string "repo_schema_id"
+    t.string "organism", default: "other"
+    t.string "level", default: "other"
+    t.text "description"
+    t.integer "policy_id"
+    t.integer "contributor_id"
+    t.string "deleted_contributor"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "parent_id"
+    t.string "uuid"
+    t.string "first_letter", limit: 1
+    t.text "other_creators"
+    t.index ["title", "group"], name: "index_templates_title_group"
+  end
+
   create_table "text_values", force: :cascade do |t|
     t.integer "version"
     t.integer "version_creator_id"
-    t.text "text", limit: 16777215, null: false
+    t.text "text", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

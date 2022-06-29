@@ -21,6 +21,7 @@ class AssayApiTest < ActionDispatch::IntegrationTest
     @sop = Factory(:sop, policy: Factory(:public_policy))
     @data_file = Factory(:data_file, policy: Factory(:public_policy))
     @document = Factory(:document, policy: Factory(:public_policy))
+    @sample = Factory(:sample, policy: Factory(:public_policy))
   end
 
   test 'should not delete assay when not project member' do
@@ -31,7 +32,7 @@ class AssayApiTest < ActionDispatch::IntegrationTest
       assert_no_difference('Assay.count') do
         delete "/#{plural_name}/#{a.id}.json"
         assert_response :forbidden
-        validate_json response.body, '#/definitions/errors'
+        validate_json response.body, '#/components/schemas/forbiddenResponse'
       end
     end
   end

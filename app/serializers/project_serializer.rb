@@ -28,8 +28,8 @@ class ProjectSerializer < AvatarObjSerializer
     BaseSerializer.convert_policy object.default_policy
   end
 
-  attribute :edam_topics do
-    edam_annotations('edam_topics')
+  attribute :topic_annotations do
+    controlled_vocab_annotations('topic_annotations')
   end
 
   has_many :organisms,  include_data: true

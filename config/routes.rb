@@ -750,6 +750,7 @@ SEEK::Application.routes.draw do
       get :manage
       patch :manage_update
       post :template_attributes
+      post :update_annotations_ajax
     end
     collection do
       get :task_status

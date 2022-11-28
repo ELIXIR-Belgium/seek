@@ -1,5 +1,5 @@
 <% if item.can_view? -%>
-	<%= button_link_to("View #{t('sample').pluralize}", 'index', template_samples_path(item)) %>
+	<%= button_link_to("View #{t('sample').pluralize}", 'view_samples', template_samples_path(item)) %>
 <% end -%>
 <%= item_actions_dropdown do %>
 	<% if item.can_edit? -%>

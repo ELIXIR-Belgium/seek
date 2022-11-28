@@ -746,6 +746,7 @@ SEEK::Application.routes.draw do
       get :manage
       patch :manage_update
       post :template_attributes
+      post :update_annotations_ajax
     end
     collection do
       post :filter_isa_tags_by_level

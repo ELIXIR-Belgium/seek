@@ -15,7 +15,9 @@
       <%=
         template_attribute_details_table(@template.template_attributes)
       %>
-
+    </div>
+    <div class="col-md-3 col-sm-4">
+      <%= render partial: "assets/resource_main_content_right", locals: { resource: @template } %>
     </div>
   <% end %>
   <%= tab_pane('related-items') do %>

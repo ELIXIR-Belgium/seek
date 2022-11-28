@@ -25,7 +25,7 @@ en:
   discipline: "Discipline"
   document: &document "Document"
   model: &model "Model"
-  sop: &sop "SOP"
+  sop: &sop "Protocol"
   workflow: &workflow "Workflow"
   workflow_class: "Workflow Type"
   tool: "Tool"

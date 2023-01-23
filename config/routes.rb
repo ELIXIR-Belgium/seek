@@ -469,7 +469,6 @@ SEEK::Application.routes.draw do
       post :create_metadata
     end
     member do
-      get :plot
       get :explore
       get :samples_table
       get :select_sample_type
@@ -837,4 +836,11 @@ SEEK::Application.routes.draw do
   get '/home/isa_colours' => 'homes#isa_colours'
 
   post '/previews/markdown' => 'previews#markdown'
+
+  # cookie consent
+  get 'cookies/consent' => 'cookies#consent'
+  post 'cookies/consent' => 'cookies#set_consent'
+
+  # for the api docs under production, avoids special rewrite rules
+  get 'api', to: static("api/index.html") if Rails.env.production?
 end

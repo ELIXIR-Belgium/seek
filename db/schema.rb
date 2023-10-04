@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_08_09_054421) do
+ActiveRecord::Schema.define(version: 2023_08_25_123444) do
 
   create_table "activity_logs", id: :integer, force: :cascade do |t|
     t.string "action"
@@ -2112,7 +2112,7 @@ ActiveRecord::Schema.define(version: 2023_08_09_054421) do
 
   create_table "templates", force: :cascade do |t|
     t.string "title"
-    t.string "group", default: "other"
+    t.string "group", default: "Project specific templates"
     t.integer "group_order"
     t.string "temporary_name"
     t.string "version"
@@ -2121,8 +2121,8 @@ ActiveRecord::Schema.define(version: 2023_08_09_054421) do
     t.string "isa_technology_type"
     t.string "isa_protocol_type"
     t.string "repo_schema_id"
-    t.string "organism", default: "other"
-    t.string "level", default: "other"
+    t.string "organism", default: "any"
+    t.string "level"
     t.text "description"
     t.integer "policy_id"
     t.integer "contributor_id"

@@ -1,6 +1,6 @@
 <% custom_metadata_type.custom_metadata_attributes.each do |attribute| %>
   <div class="form-group">
-    <%= custom_metadata_form_field_for_attribute(attribute,resource) %>
+    <%= custom_metadata_form_field_for_attribute(attribute,resource, parent_resource) %>
     <% unless attribute.description.nil? %>
       <%= custom_metadata_attribute_description(attribute.description) %>
     <% end %>

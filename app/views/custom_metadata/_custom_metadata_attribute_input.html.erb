@@ -1,6 +1,7 @@
 <%
   panel_label ||= 'Extended metadata'
   panel_style = resource.custom_metadata.try(:custom_metadata_type) ? '' : 'display:none'
+  parent_resource ||= parent_resource
 %>
 
 <%= folding_panel(panel_label, false, style:panel_style,id:'custom_metadata_attribute_panel') do %>

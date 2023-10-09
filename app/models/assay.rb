@@ -4,7 +4,7 @@ class Assay < ApplicationRecord
 
   enum status: [:planned, :running, :completed, :cancelled, :failed]
   belongs_to :assignee, class_name: 'Person'
-  
+
   # needs to before acts_as_isa - otherwise auto_index=>false is overridden by Seek::Search::CommonFields
   if Seek::Config.solr_enabled
     searchable(auto_index: false) do
@@ -24,7 +24,7 @@ class Assay < ApplicationRecord
   acts_as_isa
   acts_as_snapshottable
 
-  belongs_to :sample_type 
+  belongs_to :sample_type
 
   belongs_to :assay_class
   has_many :assay_organisms, dependent: :destroy, inverse_of: :assay
@@ -65,6 +65,13 @@ class Assay < ApplicationRecord
   has_filter :assay_class, :assay_type, :technology_type
 
   enforce_authorization_on_association :study, :view
+
+  # Fetches the assay which is linked through linked_sample_attributes (Single Page specific method)
+  def linked_assay
+    sample_type.linked_sample_attributes
+               .select { |lsa| lsa.isa_tag.nil? && lsa.title.include?('Input') }
+               .first&.sample_type&.assays&.first
+  end
 
   def default_contributor
     User.current_user.try :person

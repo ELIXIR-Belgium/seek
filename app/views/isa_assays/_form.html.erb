@@ -45,8 +45,8 @@ show_custom_metadata =
   </div>
 
   <% if show_custom_metadata %>
-    <%= render partial: 'custom_metadata/custom_metadata_type_selection', locals:{f:assay_fields, resource:@isa_assay.assay} %>
-    <%= render partial: 'custom_metadata/custom_metadata_attribute_input', locals:{f:assay_fields,resource:@isa_assay.assay, parent_resource: "isa_assay"} %>
+    <%= render partial: 'extended_metadata/extended_metadata_type_selection', locals:{f:assay_fields, resource:@isa_assay.assay} %>
+    <%= render partial: 'extended_metadata/extended_metadata_attribute_input', locals:{f:assay_fields,resource:@isa_assay.assay, parent_resource: "isa_assay"} %>
   <% end %>
 
   <div class="form-group hidden"  >

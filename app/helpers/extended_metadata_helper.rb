@@ -5,9 +5,9 @@ module ExtendedMetadataHelper
     element_class = "extended_metadata_attribute_#{attribute.sample_attribute_type.base_type.downcase}"
 
     if parent_resource
-      element_name = "#{parent_resource}[#{resource.class.name.underscore}][custom_metadata_attributes][data][#{attribute.title}]"
+      element_name = "#{parent_resource}[#{resource.class.name.underscore}][extended_metadata_attributes][data][#{attribute.title}]"
     else
-      element_name = "#{resource.class.name.underscore}[custom_metadata_attributes][data][#{attribute.title}]"
+      element_name = "#{resource.class.name.underscore}[extended_metadata_attributes][data][#{attribute.title}]"
     end
 
     if attribute.linked_extended_metadata? || attribute.linked_extended_metadata_multi?

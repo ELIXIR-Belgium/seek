@@ -65,6 +65,13 @@ class Assay < ApplicationRecord
 
   enforce_authorization_on_association :study, :view
 
+  # Fetches the assay which is linked through linked_sample_attributes (Single Page specific method)
+  def linked_assay
+    sample_type.linked_sample_attributes
+               .select { |lsa| lsa.isa_tag.nil? && lsa.title.include?('Input') }
+               .first&.sample_type&.assays&.first
+  end
+
   def previous_linked_assay_sample_type
     sample_type.sample_attributes.detect { |sa| sa.isa_tag.nil? && sa.title.include?('Input') }&.linked_sample_type
   end

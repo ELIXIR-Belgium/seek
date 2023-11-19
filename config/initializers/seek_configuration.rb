@@ -109,7 +109,8 @@ def load_seek_config_defaults!
 #time in minutes that the feeds on the front page are cached for
   Seek::Config.default :home_feeds_cache_timeout,30
 # Branding
-  Seek::Config.default :instance_name,'FAIRDOM-SEEK'
+  # Seek::Config.default :instance_name,'FAIRDOM-SEEK'
+  Seek::Config.default :instance_name,'DataHub'
   Seek::Config.default :instance_link,'https://fairdomseek.org'
 
   Seek::Config.default :instance_admins_name,"FAIRDOM"

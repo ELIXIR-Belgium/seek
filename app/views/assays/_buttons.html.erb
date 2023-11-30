@@ -28,7 +28,11 @@
   <% end %>
 
   <% if item.can_manage? -%>
-    <li><%= image_tag_for_key('manage', manage_assay_path(item), "Manage #{assay_word}", nil, "Manage #{assay_word}") -%></li>
+    <% if displaying_single_page? %>
+      <li><%= image_tag_for_key('manage', manage_assay_path(assay: item, is_isa_assay: true), "Manage ISA Assay", nil, "Manage ISA Assay") -%></li>
+    <% else %>
+      <li><%= image_tag_for_key('manage', manage_assay_path(item), "Manage #{assay_word}", nil, "Manage #{assay_word}") -%></li>
+    <% end %>
     <%= render :partial => 'snapshots/new_snapshot_link', :locals => {:item => item} %>
   <% end -%>
 

@@ -176,6 +176,13 @@ class AssaysController < ApplicationController
     end
   end
 
+  def manage_update
+    unless @assay.sample_type.nil?
+      update_sharing_policies(@assay.sample_type)
+    end
+    super
+  end
+
   private
 
   def assay_params

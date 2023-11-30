@@ -27,7 +27,7 @@
 
   <% if item.can_manage? -%>
     <% if displaying_single_page? %>
-      <li><%= image_tag_for_key('manage', manage_study_path(item), "Manage #{t('isa_study')}", nil, "Manage #{t('isa_study')}") -%></li>
+      <li><%= image_tag_for_key('manage', manage_study_path(study: item, is_isa_conform: true), "Manage #{t('isa_study')}", nil, "Manage #{t('isa_study')}") -%></li>
     <% else %>
       <li><%= image_tag_for_key('manage', manage_study_path(item), "Manage #{t('study')}", nil, "Manage #{t('study')}") -%></li>
     <% end %>

@@ -1,6 +1,6 @@
 class CreateTemplateAuthLookup < ActiveRecord::Migration[5.2]
   def change
-    create_table :template_auth_lookup, {:id => false} do |t|
+    create_table :template_auth_lookup, id: false do |t|
       t.integer :user_id
       t.integer :asset_id
       t.boolean :can_view,     :default => false

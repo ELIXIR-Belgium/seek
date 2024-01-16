@@ -46,7 +46,8 @@
 <%= debug(params.except(:utf8)) if Rails.env.development? %>
 
 <% if cookie_consent.allow_tracking? %>
-  <%= render partial: 'layouts/piwik' if Seek::Config.piwik_analytics_enabled  %>
+  <%# render partial: 'layouts/piwik' if Seek::Config.piwik_analytics_enabled  %>
+  <%= render partial: 'layouts/matomo' if Seek::Config.piwik_analytics_enabled  %>
   <% if Seek::Config.google_analytics_enabled %>
     <script id="ga-script"/> <!-- so we can check if the ga-script is here -->
     <%= analytics_init  %>

@@ -314,9 +314,8 @@ you can choose to have a %{project} linked to a site managed %{programme} instea
     file_template: "A File Template describes conforming DataFiles.For example, a File Template that is a Word document may describe conformant PNG images."
 
   cookies:
-    notice: "%{instance_name} makes use of some necessary cookies to provide its core functionality."
-    analytics: Additionally, we make use of %{analytics} to discover how people are using %{instance_name} in order to help us improve the service.
-      To opt out of this, choose the "Allow only necessary cookies" or "Allow necessary cookies and embedded content" option.
+    notice: "%{instance_name} uses essential cookies to ensure its proper functionality."
+    analytics: We also use %{analytics}, a GDPR-compliant analytics tool, to collect anonymous information about your visit. These cookies do not require your consent and are automatically enabled. If you wish to allow additional cookies for better experience, please click "Accept All Cookies."
     necessary_cookies_btn: Only allow necessary cookies
     all_cookies_btn: Allow all cookies
     no_consent: No cookie consent provided
@@ -326,6 +325,6 @@ you can choose to have a %{project} linked to a site managed %{programme} instea
       necessary: Cookies necessary for %{instance_name} to function, for example to provide user-authentication and forgery protection.
     buttons:
       revoke: Revoke cookie consent
-      all: Allow all cookies
+      all: Accept all cookies
       embedding: Allow necessary cookies and embedded content
-      necessary: Allow only necessary cookies
+      necessary: Save preferences

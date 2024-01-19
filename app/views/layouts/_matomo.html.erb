@@ -3,7 +3,7 @@
     var _paq = window._paq || [];
     /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
     _paq.push(['disableCookies']);
-    _paq.push(['enableLinkTracking']);
+    _paq.push(['trackPageView']);
     (function() {
         var u=(("https:" == document.location.protocol) ? "https://<%= Seek::Config.piwik_analytics_url %>/" : "http://<%= Seek::Config.piwik_analytics_url %>/");
         _paq.push(['setTrackerUrl', u+'matomo.php']);
